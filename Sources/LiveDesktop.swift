@@ -315,10 +315,13 @@ final class LiveDesktop: NSObject, ObservableObject {
       let applications = content.applications.filter {
         $0.processID == ProcessInfo.processInfo.processIdentifier
       }
-      try await stream.updateContentFilter(
-        SCContentFilter(
-          display: display, excludingApplications: applications, exceptingWindows: windows))
-      if session == currentSession { includedWindowIDs = windowIDs }
+      let filter = SCContentFilter(
+        display: display, excludingApplications: applications, exceptingWindows: windows)
+      try await stream.updateContentFilter(filter)
+      if session == currentSession {
+        includedWindowIDs = windowIDs
+        captureFilter = filter
+      }
     } catch {
       guard session == currentSession else { return }
       stop()
@@ -425,6 +428,8 @@ final class LiveDesktop: NSObject, ObservableObject {
         !self.motion.isClosing
       else { return }
       self.idleTask = nil
+      await self.refreshIncludedWindows()
+      guard self.session == idleSession, self.isActive, !self.motion.isClosing else { return }
       self.suspendCapture()
     }
   }
@@ -471,7 +476,6 @@ final class LiveDesktop: NSObject, ObservableObject {
         self.frames = output
         self.stream = stream
         self.captureSuspended = false
-        await self.refreshIncludedWindows()
       } catch {
         self.resumeTask = nil
         guard self.session == resumeSession, self.isActive else { return }
