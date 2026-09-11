@@ -446,6 +446,17 @@ final class LiveDesktop: NSObject, ObservableObject {
     }
   }
 
+  private nonisolated static func startStream(
+    filter: SCContentFilter, configuration: SCStreamConfiguration, output: ScreenFrames
+  ) async throws -> SCStream {
+    let stream = SCStream(filter: filter, configuration: configuration, delegate: output)
+    try stream.addStreamOutput(
+      output, type: .screen,
+      sampleHandlerQueue: DispatchQueue(label: "hinge.capture", qos: .userInteractive))
+    try await stream.startCapture()
+    return stream
+  }
+
   private func resumeCapture() {
     guard isActive, captureSuspended, resumeTask == nil, let renderer,
       let filter = captureFilter, let configuration = captureConfiguration
@@ -463,11 +474,8 @@ final class LiveDesktop: NSObject, ObservableObject {
             self.error = failure.localizedDescription
           }
         }
-        let stream = SCStream(filter: filter, configuration: configuration, delegate: output)
-        try stream.addStreamOutput(
-          output, type: .screen,
-          sampleHandlerQueue: DispatchQueue(label: "hinge.capture", qos: .userInteractive))
-        try await stream.startCapture()
+        let stream = try await Self.startStream(
+          filter: filter, configuration: configuration, output: output)
         self.resumeTask = nil
         guard self.session == resumeSession, self.isActive, self.captureSuspended else {
           try? await stream.stopCapture()
