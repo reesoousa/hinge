@@ -4,7 +4,7 @@ Este é um fork do [Noveum/hinge](https://github.com/Noveum/hinge), um app de ma
 
 ## Se o usuário quiser instalar, compilar ou testar o app
 
-Siga o [SETUP.md](SETUP.md). Ele cobre requisitos de hardware, build, instalação e — mais importante — as armadilhas de permissão de Gravação de Tela que não são óbvias e custam bastante tempo quando descobertas na tentativa e erro.
+Siga o [SETUP.md](SETUP.md). Ele cobre requisitos de hardware, build, instalação e, mais importante, as armadilhas de permissão de Gravação de Tela que não são óbvias e custam bastante tempo quando descobertas na tentativa e erro.
 
 Pontos que costumam derrubar quem instala pela primeira vez, todos detalhados no SETUP.md:
 
