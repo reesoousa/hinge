@@ -279,7 +279,12 @@ final class LiveDesktop: NSObject, ObservableObject {
       motion.setEnabled(true)
       isActive = true
       isStarting = false
-      if motion.isClosing { beginRendering() } else { scheduleIdleSuspend() }
+      if motion.isClosing {
+        renderer.beginEntry()
+        beginRendering()
+      } else {
+        scheduleIdleSuspend()
+      }
     } catch {
       guard self.session == session else { return }
       stop()
