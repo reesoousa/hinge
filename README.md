@@ -2,10 +2,6 @@
 
 Dê uma dobradinha no desktop do seu MacBook. Feche a tampa e veja a tela dobrar e desfocar suavemente. Abra e tudo volta.
 
-[![Hinge dobrando o desktop](web/assets/demo-poster.jpg)](web/assets/demo.mp4)
-
-*Clique para ver o vídeo de demonstração (19 s, 1080p).*
-
 ## Por que este fork existe
 
 O upstream entrega o efeito. Este fork persegue outra coisa: fazer o Hinge **parecer parte do sistema**, e não um app que você instalou.
