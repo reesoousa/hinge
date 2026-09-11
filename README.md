@@ -1,34 +1,50 @@
-# Hinge
+# Hinge Native Edition
 
-Give your MacBook desktop a little bend. Close the lid and watch your screen softly fold and blur. Open it and everything comes back.
+Dê uma dobradinha no desktop do seu MacBook. Feche a tampa e veja a tela dobrar e desfocar suavemente. Abra e tudo volta.
 
-## For the nerds
+Fork do [Noveum/hinge](https://github.com/Noveum/hinge) com quatro mudanças ainda ausentes no upstream e um acabamento de integração com o sistema.
 
-Hinge reads the lid angle 120 times a second and turns it into a continuous animation. Slow tilt, slow bend. Quick tilt, quick bend. A little smoothing takes the steps out of whole-degree sensor readings.
+## O que muda neste fork
 
-ScreenCaptureKit supplies your live desktop, and Metal adds perspective and progressive blur at 60 fps. Everything stays in memory on your Mac. No recordings, no uploads.
+| Mudança | O que resolve |
+|---|---|
+| Recuperação pós-sono | A animação de **abertura** volta a rodar depois de fechar a tampa por completo. No upstream ela nunca aparecia: a recuperação esperava 1 segundo fixo antes de checar o sensor, e a tampa já estava aberta quando o app voltava. |
+| Segue o ângulo de abertura | A posição aberta passa a ser o ângulo onde você **estaciona** a tampa, toda vez. Onde você deixar a tela, ela fica limpa, e só fechar a partir dali dobra. |
+| Pausa de captura em repouso | A captura para 3 segundos depois que a dobra repousa. O indicador de gravação de tela do macOS deixa de ficar aceso o dia inteiro e passa a acender só durante a dobra. |
+| Entrada suave | Remove o solavanco visível no início da animação, e tira do caminho crítico o trabalho pesado que travava o começo do efeito. |
 
-## Install
+Além disso, o app roda como utilitário de barra de menus: sem ícone na Dock, sem aparecer no Cmd+Tab. Ele vive no ícone ao lado do relógio, como um app nativo do sistema.
 
-Requires an Apple silicon MacBook with a supported lid sensor and macOS 14 or later.
+## Para os curiosos
 
-[Download Hinge](https://hinge.noveum.ai/download), open the DMG, and drag Hinge into Applications. This prototype is not notarized; macOS may ask you to approve it under Privacy & Security.
+O Hinge lê o ângulo da tampa 120 vezes por segundo e transforma isso numa animação contínua. Inclinação lenta, dobra lenta. Inclinação rápida, dobra rápida. Uma suavização tira os degraus das leituras do sensor, que vêm em graus inteiros.
 
-Prefer building it yourself? Grab Xcode, then:
+O ScreenCaptureKit fornece seu desktop ao vivo, e o Metal aplica perspectiva e desfoque progressivo a 60 fps. Tudo permanece na memória do seu Mac. Sem gravações, sem envio para lugar nenhum.
+
+O indicador de gravação de tela do macOS é desenhado pelo sistema e **nenhum app consegue escondê-lo**. É uma proteção de privacidade, e contorná-la seria derrotar o propósito dela. O que este fork faz é honesto: não captura quando não há nada a capturar.
+
+## Instalação
+
+Requer um MacBook **Apple silicon** com sensor de ângulo de tampa e **macOS 14** ou superior.
+
+O passo a passo completo está no [SETUP.md](SETUP.md), incluindo as armadilhas de permissão de Gravação de Tela que custam bastante tempo quando descobertas na tentativa e erro. O caminho curto:
 
 ```sh
-git clone https://github.com/Noveum/hinge.git
-cd hinge
 make build
-open build/Hinge.app
+cp -R build/Hinge.app /Applications/
+open -a /Applications/Hinge.app
 ```
 
-Allow Screen Recording, reopen Hinge if prompted, and turn it on. By default Hinge treats whatever angle you settle at as your open position, so wherever you park the lid stays clear and only closing from there folds. Prefer one fixed angle? Turn off **Follow my open angle**, get comfy, and click **Set open position**. Hinge remembers.
+Depois autorize o app em **Ajustes do Sistema → Privacidade e Segurança → Gravação de Tela**, e então **encerre e reabra o app**. O macOS resolve a autorização de captura uma vez por processo, então conceder a permissão com o app já rodando não surte efeito.
 
-Hinge also pauses capture while the lid rests, so the macOS recording indicator only lights up while your desktop is actually folding. That indicator is drawn by the system and no app can hide it.
+Por padrão o Hinge trata como posição aberta qualquer ângulo onde você estacionar a tampa. Prefere um ângulo fixo? Desligue **Follow my open angle** nos Ajustes, acomode a tela e clique em **Set open position**. O Hinge lembra.
 
-## Got an idea?
+## Design do movimento
 
-Feature requests are welcome. [Open an issue](https://github.com/Noveum/hinge/issues) or just shoot a PR. Small fixes, smoother motion, fun ideas: come play.
+As decisões de implementação, os números de temporização e o raciocínio por trás de cada escolha estão em [MOTION.md](MOTION.md), mantido em dia junto com as mudanças de comportamento.
 
-[Development checks and setup](CHECKS.md).
+## Créditos
+
+Todo o trabalho original é do [Noveum/hinge](https://github.com/Noveum/hinge). As mudanças deste fork estão propostas de volta ao upstream em pull requests separados.
+
+[Checks e setup de desenvolvimento](CHECKS.md).

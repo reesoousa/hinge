@@ -1,13 +1,14 @@
-# Instalar este fork do Hinge
+# Instalar o Hinge Native Edition
 
-Fork do [Noveum/hinge](https://github.com/Noveum/hinge) com quatro mudanças ainda não presentes no upstream:
+Fork do [Noveum/hinge](https://github.com/Noveum/hinge) com cinco mudanças ainda não presentes no upstream:
 
 | Mudança | O que faz |
 |---|---|
 | Wake recovery | A animação de **abertura** volta a rodar depois de fechar a tampa por completo. No upstream ela nunca aparecia: a recuperação pós-sono esperava 1 segundo fixo antes de checar o sensor, e a tampa já estava aberta. |
 | Follow my open angle | A posição aberta passa a ser o ângulo onde você **estaciona** a tampa, toda vez. Onde você deixar a tela, ela fica visível. |
 | Pause capture at rest | A captura para 3 s depois que a dobra repousa. O indicador de gravação de tela do macOS deixa de ficar aceso o dia inteiro e passa a acender só durante a dobra. |
-| Fade de entrada | Tira o solavanco visível no início da animação de abertura. |
+| Fade de entrada | Tira o solavanco visível no início da animação de abertura, e remove do caminho crítico o trabalho pesado que travava o começo do efeito. |
+| Utilitário de barra de menus | O app roda sem ícone na Dock e sem aparecer no Cmd+Tab. Vive no ícone ao lado do relógio. |
 
 ## Requisitos
 
@@ -84,4 +85,6 @@ Conceda a permissão de tela uma última vez. Depois disso ela sobrevive aos reb
 | Ângulo adaptativo | Estacione a tampa num ângulo novo e espere um segundo. A tela fica limpa a partir dali; só fechar a partir desse ponto dobra. Segurar a tampa parada no meio de um fechamento **não** deve desfazer a dobra. |
 | Pausa de captura | Com a tampa parada por mais de 3 s, o indicador de gravação de tela do macOS apaga. Ele reacende ao mover a tampa. |
 
-Os dois últimos têm toggles em **Ajustes** dentro do app, caso você prefira o comportamento antigo.
+O ângulo adaptativo e a pausa de captura têm toggles em **Ajustes** dentro do app, caso você prefira o comportamento antigo.
+
+Como o app não aparece na Dock, abra os Ajustes pelo ícone do Hinge na barra de menus, ao lado do relógio. O atalho **⌃⌥H** liga e desliga o efeito de qualquer lugar.
