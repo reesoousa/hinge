@@ -251,7 +251,7 @@ final class DesktopRenderer: NSObject, MTKViewDelegate {
     let time = presentationTime ?? CACurrentMediaTime()
     presentationTime = nil
     let progress = motion.sample(at: time) * effectStrength
-    guard progress > 0 else {
+    guard abs(progress) > 0.0002 else {
       clear(view)
       return
     }
@@ -276,7 +276,7 @@ final class DesktopRenderer: NSObject, MTKViewDelegate {
     if blurredGeneration != generation, encodeBlur(command: command, texture: texture) {
       blurredGeneration = generation
     }
-    let blend = min(progress / 0.025, 1)
+    let blend = min(abs(progress) / 0.025, 1)
     var opacity = blend * blend * (3 - 2 * blend)
     lock.lock()
     if let entryStart {

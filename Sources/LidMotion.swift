@@ -18,6 +18,10 @@ final class LidMotion {
   private var lowestAngle: Double?
   private var settleAngle: Double?
   private var settleStart = 0.0
+  private var bounceAmplitude = 0.0
+  private var bouncePhase = 0.0
+  private var bounceArmed = false
+  private var unfoldPeak = 0.0
 
   init(openAngle: Double = 100, followOpenAngle: Bool = false) {
     baseline = openAngle
@@ -114,6 +118,9 @@ final class LidMotion {
   }
 
   private func reset() {
+    bounceAmplitude = 0
+    bounceArmed = false
+    unfoldPeak = 0
     trackedAngle = angle
     angularVelocity = 0
     direction = 0
@@ -139,6 +146,7 @@ final class LidMotion {
     guard enabled, angle != nil else {
       displayed = 0
       displayVelocity = 0
+      bounceAmplitude = 0
       return 0
     }
     updateTarget(at: time)
@@ -167,7 +175,24 @@ final class LidMotion {
       displayed = min(max(displayed, 0), 1)
       displayVelocity = 0
     }
-    return Float(displayed)
+    if target > 0.05 {
+      bounceArmed = true
+      unfoldPeak = 0
+    }
+    if target == 0, displayVelocity < 0 {
+      unfoldPeak = max(unfoldPeak, -displayVelocity)
+    }
+    if bounceArmed, target == 0, displayed < 0.02, unfoldPeak > 0.5 {
+      bounceAmplitude = min(unfoldPeak * 0.032, 0.05)
+      bouncePhase = 0
+      bounceArmed = false
+    }
+    guard bounceAmplitude > 0 else { return Float(displayed) }
+    bouncePhase += delta
+    let envelope = exp(-bouncePhase * 13)
+    let rebound = displayed - bounceAmplitude * envelope * sin(bouncePhase * 32)
+    if envelope < 0.03 { bounceAmplitude = 0 }
+    return Float(min(max(rebound, -0.08), 1))
   }
 
   private func velocity(at time: Double) -> Double {
@@ -177,6 +202,6 @@ final class LidMotion {
   var isClosing: Bool {
     lock.lock()
     defer { lock.unlock() }
-    return target > 0
+    return target > 0 || bounceAmplitude > 0
   }
 }

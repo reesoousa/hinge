@@ -31,14 +31,16 @@ fragment float4 foldFragment(FoldVertex in [[stage_in]],
     texture2d<float> sides [[texture(4)]],
     constant FoldParameters &p [[buffer(0)]]) {
     constexpr sampler sampleMode(coord::normalized, address::clamp_to_edge, filter::linear);
+    float fold = max(p.progress, 0.0);
     float taper = p.taper * p.progress;
     float q = (1.0 + taper) / (1.0 + taper * in.uv.y);
     float2 uv = float2((in.uv.x - 0.5) * q + 0.5, in.uv.y * q);
     float edge = min(uv.x, 1.0 - uv.x);
     float2 blurUV = float2(p.blurInset + uv.x * p.blurSpan, uv.y);
-    float feather = smoothstep(0.0, max(0.0001, p.progress * 0.012 * (1.0 - uv.y)), edge);
+    float feather = smoothstep(0.0, max(0.0001, fold * 0.012 * (1.0 - uv.y)), edge);
     float3 sharp = mix(sides.sample(sampleMode, blurUV).rgb, source.sample(sampleMode, uv).rgb, feather);
-    float amount = 36.0 * p.progress * (1.0 - smoothstep(0.0, 0.9, uv.y));
+    float late = smoothstep(0.60, 1.0, fold);
+    float amount = 36.0 * fold * (1.0 - smoothstep(0.0, mix(0.9, 1.7, late), uv.y));
     float3 color;
     if (amount < 6.0) {
         color = mix(sharp, soft.sample(sampleMode, blurUV).rgb, amount / 6.0);
@@ -49,6 +51,6 @@ fragment float4 foldFragment(FoldVertex in [[stage_in]],
     }
     float upper = 1.0 - smoothstep(0.0, 0.85, uv.y);
     float corners = (1.0 - smoothstep(0.0, 0.19, edge)) * upper;
-    color *= 1.0 - p.progress * (0.50 * corners + 0.10 * upper);
+    color *= 1.0 - fold * (0.50 * corners + 0.10 * upper + 0.06 * late);
     return float4(color * p.opacity, p.opacity);
 }
