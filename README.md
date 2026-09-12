@@ -60,6 +60,8 @@ O indicador de gravação de tela do macOS é desenhado pelo sistema e **nenhum 
 
 As quatro primeiras estão propostas de volta ao upstream em pull requests separados.
 
+Este build também acompanha o upstream atual, então já inclui os Ajustes reconstruídos em sidebar, a escolha entre desfoque e preto nas laterais da dobra, o religamento automático ao iniciar, e o aviso claro quando o Mac não tem sensor de tampa.
+
 ## Instalação
 
 O passo a passo completo está no [SETUP.md](SETUP.md), incluindo as armadilhas de permissão de Gravação de Tela que custam bastante tempo quando descobertas na tentativa e erro. O caminho curto:
