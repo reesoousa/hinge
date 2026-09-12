@@ -39,8 +39,8 @@ fragment float4 foldFragment(FoldVertex in [[stage_in]],
     float2 blurUV = float2(p.blurInset + uv.x * p.blurSpan, uv.y);
     float feather = smoothstep(0.0, max(0.0001, fold * 0.012 * (1.0 - uv.y)), edge);
     float3 sharp = mix(sides.sample(sampleMode, blurUV).rgb, source.sample(sampleMode, uv).rgb, feather);
-    float late = smoothstep(0.60, 1.0, fold);
-    float amount = 36.0 * fold * (1.0 - smoothstep(0.0, mix(0.9, 1.7, late), uv.y));
+    float late = smoothstep(0.52, 1.0, fold);
+    float amount = 36.0 * fold * (1.0 - smoothstep(0.0, mix(0.9, 2.2, late), uv.y));
     float3 color;
     if (amount < 6.0) {
         color = mix(sharp, soft.sample(sampleMode, blurUV).rgb, amount / 6.0);

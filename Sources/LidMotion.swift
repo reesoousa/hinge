@@ -147,8 +147,8 @@ final class LidMotion {
     lastTarget = target
     if settling {
       let energy = min(abs(displayVelocity) / 2.5, 1)
-      let damping = max(0.55, 0.98 - 0.43 * energy)
-      let springiness = 20.0
+      let damping = max(0.40, 0.96 - 0.46 * energy)
+      let springiness = 44.0
       let ringing = springiness * (1 - damping * damping).squareRoot()
       let fade = exp(-damping * springiness * delta)
       let cosine = cos(ringing * delta)
