@@ -1,11 +1,14 @@
 # Instalar o Hinge Native Edition
 
-Fork do [Noveum/hinge](https://github.com/Noveum/hinge) com cinco mudanças ainda não presentes no upstream:
+Fork do [Noveum/hinge](https://github.com/Noveum/hinge) com oito mudanças ainda não presentes no upstream:
 
 | Mudança | O que faz |
 |---|---|
 | Wake recovery | A animação de **abertura** volta a rodar depois de fechar a tampa por completo. No upstream ela nunca aparecia: a recuperação pós-sono esperava 1 segundo fixo antes de checar o sensor, e a tampa já estava aberta. |
-| Follow my open angle | A posição aberta passa a ser o ângulo onde você **estaciona** a tampa, toda vez. Onde você deixar a tela, ela fica visível. |
+| Follow my open angle | A posição aberta passa a ser o ângulo onde você **estaciona** a tampa, toda vez. Onde você deixar a tela, ela fica visível. Parar num ângulo de uso durante o fechamento devolve a tela ao normal. |
+| Volta elástica | A volta ao normal ultrapassa o plano e balança de volta, com intensidade proporcional à velocidade com que você fechou. |
+| Desfoque até o fim | Passando dos ~50°, a faixa de baixo da tela, que antes ficava nítida, vai desfocando junto até o fechamento. |
+| Nitidez por tela | A captura passa a ser proporcional ao tamanho do display. Antes um MacBook maior recebia a mesma quantidade de pixels espalhada por mais área, e a dobra saía mais mole nele. |
 | Pause capture at rest | A captura para 3 s depois que a dobra repousa. O indicador de gravação de tela do macOS deixa de ficar aceso o dia inteiro e passa a acender só durante a dobra. |
 | Fade de entrada | Tira o solavanco visível no início da animação de abertura, e remove do caminho crítico o trabalho pesado que travava o começo do efeito. |
 | Utilitário de barra de menus | O app roda sem ícone na Dock e sem aparecer no Cmd+Tab. Vive no ícone ao lado do relógio. |
@@ -82,9 +85,13 @@ Conceda a permissão de tela uma última vez. Depois disso ela sobrevive aos reb
 |---|---|
 | Dobra | Incline a tampa sem fechar por completo. A tela dobra e desfoca progressivamente. |
 | Abertura | Feche até o Mac dormir, espere um segundo, abra. A tela deve **desdobrar** na subida, sem solavanco no início. |
-| Ângulo adaptativo | Estacione a tampa num ângulo novo e espere um segundo. A tela fica limpa a partir dali; só fechar a partir desse ponto dobra. Segurar a tampa parada no meio de um fechamento **não** deve desfazer a dobra. |
+| Volta elástica | Feche até uns 60 ou 70° e **segure**. Depois de meio segundo a tela volta ao normal, passando um pouco do plano e balançando de volta. Repita fechando devagar: o balanço deve ser bem menor. Essa diferença é o efeito funcionando. |
+| Desfoque até o fim | Feche **sem parar** dos 50° para baixo e olhe a faixa de **baixo** da tela. É lá que muda; o topo já estava no desfoque máximo. |
+| Perto de fechar | Segure a tampa em torno de 30°. Aqui ela **não** deve voltar ao normal: abaixo de 50° o fechamento é pra valer e a dobra permanece. |
 | Pausa de captura | Com a tampa parada por mais de 3 s, o indicador de gravação de tela do macOS apaga. Ele reacende ao mover a tampa. |
 
 O ângulo adaptativo e a pausa de captura têm toggles em **Ajustes** dentro do app, caso você prefira o comportamento antigo.
+
+Vale saber a diferença entre os dois comportamentos de parada, que é intencional: acima de 50° parar significa "é aqui que estou usando", e a tela limpa; abaixo disso significa "estou fechando", e a dobra continua.
 
 Como o app não aparece na Dock, abra os Ajustes pelo ícone do Hinge na barra de menus, ao lado do relógio. O atalho **⌃⌥H** liga e desliga o efeito de qualquer lugar.

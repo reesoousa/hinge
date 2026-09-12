@@ -56,9 +56,12 @@ O indicador de gravação de tela do macOS é desenhado pelo sistema e **nenhum 
 | Segue o ângulo de abertura | A posição aberta passa a ser o ângulo onde você estaciona a tampa. Onde você deixar a tela, ela fica limpa, e só fechar a partir dali dobra. |
 | Pausa de captura em repouso | A captura para 3 segundos depois que a dobra repousa, e o indicador do sistema acompanha o movimento da tampa em vez de ficar aceso o tempo todo. |
 | Entrada suave | Remove o solavanco no início da animação e tira do caminho crítico o trabalho pesado que travava o começo do efeito. |
+| Volta elástica | Parar a tampa num ângulo de uso devolve a tela ao normal ultrapassando o plano e balançando de volta, com intensidade proporcional à velocidade do fechamento. |
+| Desfoque até o fim | Passando dos ~50°, a faixa de baixo da tela acompanha o desfoque em vez de continuar nítida. |
+| Nitidez por tela | A captura passa a ser proporcional ao display, em vez de um teto fixo de pixels que penalizava MacBooks maiores. |
 | Utilitário de barra de menus | Sem ícone na Dock, sem Cmd+Tab. |
 
-As quatro primeiras estão propostas de volta ao upstream em pull requests separados.
+As mudanças de comportamento estão propostas de volta ao upstream em pull requests separados.
 
 Este build também acompanha o upstream atual, então já inclui os Ajustes reconstruídos em sidebar, a escolha entre desfoque e preto nas laterais da dobra, o religamento automático ao iniciar, e o aviso claro quando o Mac não tem sensor de tampa.
 
