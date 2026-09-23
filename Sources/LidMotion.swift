@@ -30,6 +30,7 @@ final class LidMotion {
     let available: Bool
     let beganClosing: Bool
     let adoptedAngle: Double?
+    let adoptionDue: Double?
   }
 
   func receive(_ value: Double?, at time: Double = CACurrentMediaTime()) -> Update {
@@ -59,7 +60,22 @@ final class LidMotion {
     updateTarget(at: time)
     return Update(
       availabilityChanged: changed, available: value != nil,
-      beganClosing: previous == 0 && target > 0, adoptedAngle: adopted)
+      beganClosing: previous == 0 && target > 0, adoptedAngle: adopted,
+      adoptionDue: adoptionDue(at: time))
+  }
+
+  func adoptSettled(at time: Double = CACurrentMediaTime()) -> Double? {
+    lock.lock()
+    defer { lock.unlock() }
+    guard let angle, let adopted = adoptOpenAngle(angle, at: time) else { return nil }
+    updateTarget(at: time)
+    return adopted
+  }
+
+  private func adoptionDue(at time: Double) -> Double? {
+    guard following, let candidate = settleAngle, candidate >= 50, abs(candidate - baseline) > 0.5
+    else { return nil }
+    return max(settleStart + 0.6 - time, 0)
   }
 
   private func adoptOpenAngle(_ value: Double?, at time: Double) -> Double? {
@@ -184,7 +200,7 @@ final class LidMotion {
   }
 
   private func velocity(at time: Double) -> Double {
-    angularVelocity * exp(-max(time - lastSample - 0.025, 0) / 0.08)
+    angularVelocity * exp(-max(time - lastSample - 0.12, 0) / 0.08)
   }
 
   var isClosing: Bool {

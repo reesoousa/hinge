@@ -47,6 +47,8 @@ def lexer_for(path):
         return get_lexer_by_name("xml")
     if path.suffix == ".metal":
         return get_lexer_by_name("cpp")
+    if path.suffix == ".strings":
+        return get_lexer_by_name("c")
     if path.name == ".swift-format":
         return get_lexer_by_name("json")
     return get_lexer_for_filename(path.name)
@@ -187,7 +189,7 @@ def native():
         )
         run([*formatter, "lint", "--strict", *swift])
     for path in files:
-        if path.suffix in {".plist", ".pbxproj"}:
+        if path.suffix in {".plist", ".pbxproj", ".strings"}:
             run(["plutil", "-lint", str(path)])
     shell = [str(p) for p in files if p.suffix == ".sh"]
     if shell:

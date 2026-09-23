@@ -8,6 +8,10 @@ struct HingeApp: App {
   @StateObject private var desktop = LiveDesktop()
   @StateObject private var navigator = Navigator()
 
+  init() {
+    _ = AppLanguage.atLaunch
+  }
+
   var body: some Scene {
     Window("Hinge", id: "main") {
       MainView(desktop: desktop, navigator: navigator)
@@ -87,8 +91,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
   private func showHotKeyError(_ status: OSStatus) {
     let alert = NSAlert()
-    alert.messageText = "Keyboard shortcut unavailable"
-    alert.informativeText = "Hinge could not register ⌃⌥H (error \(status))."
+    alert.messageText = String(localized: "Keyboard shortcut unavailable")
+    alert.informativeText = String(localized: "Hinge could not register ⌃⌥H (error \(status)).")
     alert.alertStyle = .warning
     alert.runModal()
   }
@@ -104,7 +108,7 @@ struct HingeMenu: View {
       desktop.setEnabled(!desktop.isEnabled)
     } label: {
       HStack {
-        Text(desktop.isEnabled ? "Turn off" : "Turn on")
+        Text(desktop.isEnabled ? String(localized: "Turn off") : String(localized: "Turn on"))
         Spacer()
         Text("⌃⌥H").foregroundStyle(.secondary)
       }

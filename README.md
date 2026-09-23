@@ -38,7 +38,7 @@ Sem o sensor de ângulo de tampa o app não funciona, e ele não existe em todos
 
 | Característica | Valor |
 |---|---|
-| Leitura do sensor | 120 Hz com o efeito ligado, 10 Hz desligado |
+| Leitura do sensor | Acompanha a atualização do sensor (~98 ms), em centésimos de grau quando o Mac reporta; 10 Hz desligado |
 | Renderização | 60 fps, via display link próprio da view |
 | Desfoque | 3 níveis gaussianos em cache na GPU, 6 / 16 / 36 px por 786 px de referência |
 | Posição aberta padrão | 100 graus, ou o ângulo onde você estacionar a tampa |
@@ -63,7 +63,7 @@ O indicador de gravação de tela do macOS é desenhado pelo sistema e **nenhum 
 
 As mudanças de comportamento estão propostas de volta ao upstream em pull requests separados.
 
-Este build também acompanha o upstream atual, então já inclui os Ajustes reconstruídos em sidebar, a escolha entre desfoque e preto nas laterais da dobra, o religamento automático ao iniciar, e o aviso claro quando o Mac não tem sensor de tampa.
+Este build também acompanha o upstream atual, então já inclui os Ajustes reconstruídos em sidebar, a escolha entre desfoque e preto nas laterais da dobra, o religamento automático ao iniciar, o aviso claro quando o Mac não tem sensor de tampa, o corte do topo e o desfoque por distância durante a dobra, a leitura do sensor em centésimos de grau, a espera pelo display interno em modo clamshell e a tradução para 17 idiomas.
 
 ## Instalação
 
@@ -79,8 +79,14 @@ Depois autorize em **Ajustes do Sistema → Privacidade e Segurança → Gravaç
 
 Como o app não aparece na Dock, os Ajustes se abrem pelo ícone na barra de menus. O atalho **⌃⌥H** liga e desliga o efeito de qualquer lugar.
 
+O app fala o idioma do seu Mac em 17 línguas, incluindo português do Brasil. Para trocar, use **Ajustes > Controles > Idioma**.
+
 ## Créditos
 
 Todo o trabalho original é do [Noveum/hinge](https://github.com/Noveum/hinge), e o efeito original é do [Bendy](https://trybendy.app/).
 
 [Checks e setup de desenvolvimento](CHECKS.md).
+
+## Traduções
+
+As traduções ficam em `Resources/Localizations/<idioma>.lproj/Localizable.strings`, um arquivo por idioma. As chaves em inglês devem ser idênticas em todos os arquivos, preservando placeholders como `%@` e `%lld`. As strings que este fork adiciona já estão traduzidas nos 17 idiomas.
